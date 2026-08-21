@@ -1,0 +1,575 @@
+/* ============================================================
+   portfolio.css — Prithish Shan
+   Layered on top of codrops base.css (loaded first).
+   Adds: fonts/readability, top nav, hero, per-theme cards,
+   scene hints, and preview detail cards. The 3D carousel
+   engine (js/index.js) is unchanged.
+   ============================================================ */
+
+:root {
+  font-size: 15px;
+  --color-text: #f4f3f1;
+  --color-bg: #0d0c0c;
+  --color-muted: rgba(244, 243, 241, 0.55);
+  --color-line: rgba(244, 243, 241, 0.16);
+  --font-sans: "Inter", system-ui, sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, monospace;
+
+  /* theme accents — cards use a shared black background; --myoverse-* is kept
+     only for hero accents (MyoVerse cards are transparent media objects). */
+  --myoverse-a: #2f6bd6;
+  --myoverse-b: #14224d;
+  --card-a: #201f22;   /* black card gradient (top) */
+  --card-b: #0d0c0c;   /* black card gradient (bottom) */
+  --medical-a: var(--card-a);
+  --medical-b: var(--card-b);
+  --foundational-a: var(--card-a);
+  --foundational-b: var(--card-b);
+  --aiapps-a: var(--card-a);
+  --aiapps-b: var(--card-b);
+}
+
+/* ---------- base overrides (readability) ---------- */
+body {
+  font-family: var(--font-sans);
+  text-transform: none;               /* base.css forces uppercase */
+  letter-spacing: normal;
+  background: var(--color-bg);
+  color: var(--color-text);
+}
+
+/* keep the codrops loader, but tidy links */
+a { color: var(--color-text); }
+
+/* ============================================================
+   FIXED TOP NAV  (override base .frame overlay)
+   ============================================================ */
+.frame {
+  display: flex;
+  position: fixed;
+  inset: 0 0 auto 0;
+  width: 100%;
+  height: auto;
+  padding: 0.9rem 1.2rem;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  grid-template-areas: none;
+  pointer-events: none;
+  background: linear-gradient(to bottom, rgba(13, 12, 12, 0.85), rgba(13, 12, 12, 0));
+  backdrop-filter: blur(2px);
+}
+.frame a { pointer-events: auto; }
+.frame__title {
+  font-size: 0.95rem;
+  font-weight: 600;
+  text-align: left;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  letter-spacing: 0.02em;
+}
+.frame__links {
+  display: flex;
+  gap: 1.1rem;
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+.mono-mark {
+  font-family: var(--font-mono);
+  font-weight: 600;
+  font-size: 0.7rem;
+  letter-spacing: 0.1em;
+  border: 1px solid var(--color-line);
+  border-radius: 4px;
+  padding: 0.18rem 0.34rem;
+  color: var(--color-text);
+}
+
+/* ============================================================
+   HERO
+   ============================================================ */
+.hero {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 6rem 1.5rem 4rem;
+  position: relative;
+}
+.hero::after {                         /* subtle grid backdrop */
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(var(--color-line) 1px, transparent 1px),
+    linear-gradient(90deg, var(--color-line) 1px, transparent 1px);
+  background-size: 64px 64px;
+  mask-image: radial-gradient(circle at 50% 45%, #000 0%, transparent 72%);
+  opacity: 0.5;
+  pointer-events: none;
+}
+.hero__inner {
+  position: relative;
+  z-index: 1;
+  max-width: 900px;
+  width: 100%;
+}
+.visually-hidden {
+  position: absolute;
+  width: 1px; height: 1px;
+  padding: 0; margin: -1px;
+  overflow: hidden; clip: rect(0 0 0 0);
+  white-space: nowrap; border: 0;
+}
+.hero__photo {
+  position: relative;
+  width: clamp(140px, 20vw, 220px);
+  aspect-ratio: 4 / 5;
+  margin: 0;
+  border-radius: 10px;
+  overflow: hidden;
+  border: 1px solid var(--color-line);
+  background: linear-gradient(150deg, var(--myoverse-b), #0d0c0c 70%);
+  display: grid;
+  place-items: center;
+}
+.hero__photo img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.hero__mono {
+  font-family: var(--font-mono);
+  font-size: 2.4rem;
+  letter-spacing: 0.14em;
+  color: rgba(244, 243, 241, 0.35);
+}
+.hero__eyebrow {
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.16em;
+  color: var(--myoverse-a);
+  margin: 0 0 0.6rem;
+}
+.hero__name {
+  font-size: clamp(2.6rem, 7vw, 4.6rem);
+  line-height: 0.98;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  margin: 0 0 1rem;
+}
+.hero__tagline {
+  font-size: clamp(1.5rem, 3.4vw, 2.4rem);
+  line-height: 1.32;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  color: var(--color-text);
+  max-width: 20ch;
+  margin: 0 0 2.4rem;
+}
+.hero__facts {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1.4rem 2rem;
+  margin: 0 0 2rem;
+}
+.hero__facts .fact { margin: 0; }
+.hero__facts dt {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  color: var(--color-muted);
+  margin-bottom: 0.4rem;
+}
+.hero__facts dd {
+  margin: 0;
+  font-size: 0.92rem;
+  line-height: 1.5;
+}
+.hero__facts dd a { border-bottom: 1px solid var(--color-line); }
+.hero__facts dd a:hover { color: var(--myoverse-a); }
+.muted { color: var(--color-muted); }
+
+.hero__scroll {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.8rem;
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--color-muted);
+}
+
+@media (max-width: 720px) {
+  .hero__inner { grid-template-columns: 1fr; text-align: left; }
+  .frame__links a:not(:last-child) { display: none; }
+}
+
+/* ============================================================
+   SCENE TITLES + HINTS
+   ============================================================ */
+/* Scene height controls both how close consecutive groups sit (the gap ≈
+   scene height − the ring's on-screen height) and the rotation scroll distance.
+   ~60vh keeps groups close while the ring still reads fully; tune to taste. */
+.scene { height: 100vh; }
+
+.scene__title {
+  /* Full-bleed hitbox: the whole vertical segment the scene occupies is
+     clickable (the click handler is bound to .scene__title). The visible
+     title stays centered via flex. */
+  position: absolute;
+  inset: 0;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: clamp(2rem, 6vw, 4rem);
+  font-weight: 800;
+  letter-spacing: -0.01em;
+  text-transform: uppercase;
+  text-align: center;
+  color: #fff;                        /* solid white grouping label */
+}
+.scene__title a {
+  cursor: pointer;
+}
+.scene__title a { color: #fff; }
+.scene__hint {
+  position: absolute;
+  bottom: 11vh;
+  left: 0;
+  right: 0;
+  text-align: center;
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--color-muted);
+  pointer-events: none;
+  margin: 0;
+}
+
+/* ============================================================
+   CAROUSEL CARDS  (override base .card__face background)
+   ============================================================ */
+.card {
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.55);
+}
+.card__face {
+  background-image: none;             /* base.css set var(--img) */
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+.card__face--front {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 1.8rem 1.6rem;
+}
+.card__face--front::after {           /* soft top sheen */
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(120% 80% at 20% 0%, rgba(255,255,255,0.18), transparent 55%);
+  pointer-events: none;
+}
+.card__kicker {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: rgba(255, 255, 255, 0.75);
+}
+.card__title {
+  font-size: 1.7rem;
+  font-weight: 700;
+  line-height: 1.08;
+  margin: auto 0 0.35rem;
+  text-transform: none;
+}
+.card__sub {
+  font-family: var(--font-mono);
+  font-size: 0.82rem;
+  color: rgba(255, 255, 255, 0.8);
+  margin: 0 0 0.9rem;
+}
+.card__tag {
+  align-self: flex-start;
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  padding: 0.28rem 0.6rem;
+  border-radius: 999px;
+  background: rgba(0, 0, 0, 0.35);
+  border: 1px solid rgba(255, 255, 255, 0.22);
+}
+.card__tag--live   { background: rgba(31, 157, 132, 0.9); border-color: transparent; color: #04140f; }
+.card__tag--award  { background: #e9c46a; border-color: transparent; color: #221803; }
+.card__tag--soon   { background: rgba(255,255,255,0.1); color: rgba(255,255,255,0.7); }
+.card__tag--wip    { background: rgba(255,255,255,0.12); color: rgba(255,255,255,0.75); }
+
+.card__face--back {
+  display: grid;
+  place-items: center;
+  background: #0d0c0c;
+}
+.card__face--back span {
+  font-family: var(--font-mono);
+  font-size: 3rem;
+  letter-spacing: 0.14em;
+  color: rgba(255, 255, 255, 0.14);
+}
+
+/* per-theme front gradients (cards + preview items) */
+[data-theme="myoverse"] .card__face--front,
+[data-theme="myoverse"] .grid__item-image { background: linear-gradient(150deg, var(--myoverse-a), var(--myoverse-b)); }
+[data-theme="medical"] .card__face--front,
+[data-theme="medical"] .grid__item-image { background: linear-gradient(150deg, var(--medical-a), var(--medical-b)); }
+[data-theme="foundational"] .card__face--front,
+[data-theme="foundational"] .grid__item-image { background: linear-gradient(150deg, var(--foundational-a), var(--foundational-b)); }
+[data-theme="aiapps"] .card__face--front,
+[data-theme="aiapps"] .grid__item-image { background: linear-gradient(150deg, var(--aiapps-a), var(--aiapps-b)); }
+
+/* ---------- cells centered on the ring origin ----------
+   The engine places cells with rotateY()+translateZ() about their own centre,
+   so each cell is centred on the carousel origin via left/top:50% + a
+   half-size negative margin. Uniform (text) cards use the default 350×420;
+   object cards override width/height/margin inline to fit their media. */
+.carousel__cell {
+  left: 50%;
+  top: 50%;
+  margin: -210px 0 0 -175px;   /* half of 420 × 350 */
+  will-change: transform;
+}
+/* keep card text above the front-face sheen */
+.card__face--front > * { position: relative; z-index: 1; }
+
+/* ---------- object cards: a free-floating object that spins in the ring ----------
+   No card surface — just the media object, sized to its own aspect ratio (set
+   inline on the cell). Double-sided like the Codrops reference this site is
+   built on (https://tympanus.net/Development/3DCarousel/); the back face repeats
+   the media, un-mirrored. All copy lives behind the click (the preview). */
+.card--object { box-shadow: none; background: transparent; overflow: visible; }
+.card--object .card__face--object {
+  padding: 0;
+  background: transparent;
+  border: none;
+  border-radius: 0;
+}
+.card--object .card__face--front::after { content: none; } /* drop the sheen */
+.card__object {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;                 /* cell aspect matches the media, so no crop */
+  border-radius: 0;
+  filter: drop-shadow(0 16px 34px rgba(0, 0, 0, 0.5));
+}
+.card--object .card__face--back .card__object { transform: scaleX(-1); } /* un-mirror */
+
+/* small status badge overlaid on an object card (e.g. "Work in progress") */
+.card__badge {
+  position: absolute;
+  top: 0.7rem;
+  left: 0.7rem;
+  z-index: 3;
+  font-family: var(--font-mono);
+  font-size: 0.6rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  padding: 0.28rem 0.55rem;
+  border-radius: 999px;
+  background: rgba(20, 19, 21, 0.62);
+  color: rgba(255, 255, 255, 0.92);
+  border: 1px solid rgba(255, 255, 255, 0.28);
+  backdrop-filter: blur(4px);
+  pointer-events: none;
+}
+
+/* ============================================================
+   PREVIEW (detail bloom)  — override base grid
+   ============================================================ */
+.preview {
+  padding: 5rem clamp(1.2rem, 6vw, 6rem) 3rem;
+  align-content: start;
+  overflow-y: auto;
+  grid-row-gap: 0.5rem;
+}
+.preview__header {
+  max-width: 1100px;
+  margin: 0 auto;
+  width: 100%;
+}
+.preview__title {
+  font-size: clamp(1.8rem, 5vw, 3rem);
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: -0.01em;
+}
+.preview__close {
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+.preview__lede {
+  max-width: 1100px;
+  margin: 0.4rem auto 1.4rem;
+  width: 100%;
+  color: rgba(244, 243, 241, 0.8);
+  font-size: 1rem;
+  line-height: 1.55;
+  max-width: min(760px, 100%);
+}
+
+/* Bento-style masonry: media tiles of different heights pack into columns with
+   no ragged gaps, while keeping each object's full crop and its caption. */
+.grid {
+  display: block;
+  column-count: 3;
+  column-gap: 1.4rem;
+  max-width: 1100px;
+  margin: 0 auto;
+  width: 100%;
+  perspective: 1200px;
+}
+@media (max-width: 900px) { .grid { column-count: 2; } }
+@media (max-width: 600px) { .grid { column-count: 1; } }
+.grid__item {
+  display: block;
+  break-inside: avoid;
+  -webkit-column-break-inside: avoid;
+  margin: 0 0 1.4rem;
+  width: 100%;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid var(--color-line);
+  border-radius: 12px;
+  padding: 0;
+  gap: 0;
+  overflow: hidden;
+  text-align: left;
+}
+.grid__item-image {
+  aspect-ratio: auto;
+  height: 84px;
+  display: flex;
+  align-items: flex-end;
+  padding: 0.7rem 0.9rem;
+  transition: none;
+}
+.grid__item:hover .grid__item-image { opacity: 1; }
+.grid__item-image { position: relative; }
+/* media thumbnails show the full image at its natural aspect — the same crop
+   the object has in the carousel (no letterboxed fixed-height strip). */
+.grid__item-image.grid__item-image--media {
+  height: auto;
+  padding: 0;
+  display: block;
+  background: #0d0c0c;
+}
+.gi__img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+.grid__item-image--media .gi__mono {
+  position: absolute;
+  top: 0.55rem;
+  left: 0.8rem;
+}
+.gi__mono {
+  display: none;            /* numbering removed from the clicked-in bento */
+  position: relative;
+  z-index: 1;
+  font-family: var(--font-mono);
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.85);
+  letter-spacing: 0.1em;
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.6);
+}
+.grid__item-caption {
+  padding: 1rem 1.1rem 1.2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+.grid__item-caption h3 {
+  font-size: 1.12rem;
+  font-weight: 700;
+  line-height: 1.2;
+  text-transform: none;
+}
+.gi__meta {
+  font-family: var(--font-mono);
+  font-size: 0.74rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--color-muted);
+  margin: 0;
+}
+.gi__desc {
+  font-size: 0.9rem;
+  line-height: 1.5;
+  color: rgba(244, 243, 241, 0.82);
+  margin: 0;
+  text-transform: none;
+}
+.gi__tech {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin-top: 0.2rem;
+}
+.gi__tech span {
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  padding: 0.22rem 0.5rem;
+  border-radius: 999px;
+  border: 1px solid var(--color-line);
+  color: rgba(244, 243, 241, 0.75);
+}
+.gi__link {
+  margin-top: 0.4rem;
+  font-family: var(--font-mono);
+  font-size: 0.76rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  align-self: flex-start;
+}
+.gi__link:not(.gi__link--private):not(.gi__link--soon) {
+  color: #7fd8c4;
+  border-bottom: 1px solid rgba(127, 216, 196, 0.5);
+}
+.gi__link--private, .gi__link--soon, .gi__link--wip { color: var(--color-muted); cursor: default; }
+
+/* ============================================================
+   FOOTER
+   ============================================================ */
+.site-footer {
+  display: flex;
+  align-items: center;
+  gap: 1.2rem;
+  flex-wrap: wrap;
+  padding: 3rem clamp(1.2rem, 5vw, 4rem);
+  border-top: 1px solid var(--color-line);
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--color-muted);
+}
+.footer__links { display: flex; gap: 1.1rem; margin-left: auto; }
