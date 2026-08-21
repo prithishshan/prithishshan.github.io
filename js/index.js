@@ -449,6 +449,8 @@ const activatePreviewFromCarousel = (e) => {
       0
     )
     .to(carousel, { rotationX: 90, rotationY: -360, z: -2000 }, 0)
+    // Fade the ring out immediately on click rather than lingering through the spin.
+    .to(carousel, { autoAlpha: 0, duration: 0.4, ease: 'power1.out' }, 0)
     .to(
       carousel,
       {
@@ -488,6 +490,7 @@ const deactivatePreviewToCarousel = (e) => {
   animatePreviewGridOut(preview);
 
   gsap.set(sceneWrapper, { autoAlpha: 1 });
+  gsap.set(carousel, { autoAlpha: 1 }); // restore the ring faded out on open
 
   const progress = 0.5; // halfway
   /*
