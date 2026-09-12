@@ -351,19 +351,19 @@
           <figure class="grid__item" data-theme="myoverse">
             <div class="grid__item-image grid__item-image--media"><img class="gi__img" src="assets/myo-app.png" alt="" /><span class="gi__mono">01</span></div>
             <figcaption class="grid__item-caption">
-              <h3>Mobile App</h3>              <p class="gi__desc">Flutter app for seamless Bluetooth connection and assignment of sensors onto their respective muscles, with controller-maintained state for reactivity. Isolated thread workers run real-time digital signal processing (bandpass filtering and Fourier analysis) while OAuth2 handles identity and every session streams to the cloud for data and long-term insights.</p>
+              <h3>Mobile App</h3>              <p class="gi__desc">Flutter app for seamless Bluetooth connection and assignment of sensors onto their respective muscles, with controller-maintained state for reactivity. Isolated thread workers run real-time digital signal processing while OAuth2 handles identity and every session streams to the cloud for data and long-term insights.</p>
               <div class="gi__tech"><span>Dart</span><span>Flutter</span><span>BLE</span><span>DSP</span></div>            </figcaption>
           </figure>
           <figure class="grid__item" data-theme="myoverse">
             <div class="grid__item-image grid__item-image--media"><img class="gi__img" src="assets/myo-devices.png" alt="" /><span class="gi__mono">02</span></div>
             <figcaption class="grid__item-caption">
-              <h3>Sensor Firmware</h3>              <p class="gi__desc">C device firmware on the Zephyr RTOS platform for robust wireless timekeeping and transmission of ultra-high-frequency EMG data packets. A BLE hub receives every EMG/IMU sensor over a 2.4 GHz nRF24 broadcast link on one radio, demultiplexes by device ID, and re-publishes each on its own BLE GATT notify characteristic.</p>
+              <h3>Sensor Firmware</h3>              <p class="gi__desc">C device firmware on the Zephyr RTOS platform for robust wireless timekeeping and transmission of ultra-high-frequency EMG data packets. A device hub receives every EMG/IMU sensor packet, demultiplexes by device ID, and streams to a mobile device.</p>
               <div class="gi__tech"><span>C</span><span>Zephyr RTOS</span><span>nRF24</span><span>BLE GATT</span></div>            </figcaption>
           </figure>
           <figure class="grid__item" data-theme="myoverse">
             <div class="grid__item-image grid__item-image--media"><img class="gi__img" src="assets/myo-backend.png" alt="" /><span class="gi__mono">03</span></div>
             <figcaption class="grid__item-caption">
-              <h3>Data API</h3>              <p class="gi__desc">A TypeScript API service deployed on AWS Lambda that stores 2 million-plus sensor logs in real time and serves long-term analytics to web and mobile consumers. A single CDK stack ties together a Firebase-authenticated HTTP API, an RDS Postgres store, and an asynchronous SQS insights worker that builds session snapshots on close.</p>
+              <h3>Data API</h3>              <p class="gi__desc">A TypeScript API service deployed on AWS Lambda that stores 2 million-plus sensor logs in real time and serves long-term analytics to web and mobile consumers. </p>
               <div class="gi__tech"><span>TypeScript</span><span>Lambda</span><span>RDS Postgres</span><span>SQS</span><span>S3</span></div>            </figcaption>
           </figure>
           <figure class="grid__item" data-theme="myoverse">
